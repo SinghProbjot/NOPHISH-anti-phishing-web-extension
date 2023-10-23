@@ -16,9 +16,9 @@
   
 ![image](https://github.com/SinghProbjot/Stage/assets/102951324/c564f497-e5b3-4dfa-ab5f-552d89328654)
 
-PROBLEMI:  
-  * webRequest, a differenza delle versioni passate, non permette più di bloccare richieste, bisogna trovare un altro modo di bloccare la richiesta in caso stiamo visitando un              sito pericoloso.
-  * API PhishTank non è più funzionante, risulta 403 forbidden, quindi ho provato a cercare delle alternative, sorge il problema del limite di richieste. Per ora mi son                     limitato a simulare le richieste api da codice.
+    PROBLEMI:  
+      * webRequest, a differenza delle versioni passate, non permette più di bloccare richieste, bisogna trovare un altro modo di bloccare la richiesta in caso stiamo visitando un              sito pericoloso.
+      * API PhishTank non è più funzionante, risulta 403 forbidden, quindi ho provato a cercare delle alternative, sorge il problema del limite di richieste. Per ora mi son                     limitato a simulare le richieste api da codice.
 ______________________________________________________________________________________________________________           
 
 - La comunicazione tra il service worker e il content avviene con lo scambio di messaggi, ed utlizzo e testo questa funzionalità mandando un alert, contenente il link della pagina visitata, prima che la richiesta sia processata, quindi utilizzando l'evento onBeforeRequest della webRequest API. L'estensione ora è in grado di intercettare tutte le richieste che vengono effettuate quando l'utente apre un link, e le richieste vengono salvate in un array se è la prima volta che sono effettuate, invece dalla seconda volta in poi verranno ignorate, poichè già salvate, per evitare richieste inutili all'API e perdere efficienza.
