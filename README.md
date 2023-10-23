@@ -11,4 +11,7 @@
   
 ![image](https://github.com/SinghProbjot/Stage/assets/102951324/c564f497-e5b3-4dfa-ab5f-552d89328654)
 
-
+PROBLEMI:  * webRequest, a differenza delle versioni passate, non permette più di bloccare richieste, bisogna trovare un altro modo di bloccare la richiesta in caso stiamo visitando un              sito pericoloso.
+           * API PhishTank non è più funzionante, risulta 403 forbidden, quindi ho provato a cercare delle alternative, sorge il problema del limite di richieste. Per ora mi son                     limitato a simulare le richieste api da codice.
+           
+- 
