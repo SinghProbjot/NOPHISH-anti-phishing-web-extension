@@ -24,7 +24,10 @@
 ______________________________________________________________________________________________________________           
 
 - La comunicazione tra il service worker e il content avviene con lo scambio di messaggi, ed utlizzo e testo questa funzionalità mandando un alert, contenente il link della pagina visitata, prima che la richiesta sia processata, quindi utilizzando l'evento onBeforeRequest della webRequest API. L'estensione ora è in grado di intercettare tutte le richieste che vengono effettuate quando l'utente apre un link, e le richieste vengono salvate in un array se è la prima volta che sono effettuate, invece dalla seconda volta in poi verranno ignorate, poichè già salvate, per evitare richieste inutili all'API e perdere efficienza.
+
+  INVIO:
   ![image](https://github.com/SinghProbjot/Stage/assets/102951324/7f89980e-78b6-4835-8962-4c3918fc5e4d)
+  RICEZIONE:
   ![image](https://github.com/SinghProbjot/Stage/assets/102951324/7884a8f0-0b71-43c0-b8c6-b49bcc6b622b)
 
   
