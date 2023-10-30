@@ -34,6 +34,12 @@ ________________________________________________________________________________
 - Sono stati introdotti dei controlli semplici sugli url, per l'estrazione del dominio, e per evitare punycode, prendendo spunto anche dalla base scelta in fase di partenza. Questi controlli verranno poi ampliati successivamente, per evitare troppe richieste inutili quando si è già a conoscenza della reputazione di un url.
   
 - Risolto problema legato al blocco di richieste html: utlizzo di DeclarativeNetRequest, che permette col manifest v3 di definire dinamicamente delle regole: https://developer.chrome.com/docs/extensions/reference/declarativeNetRequest/
+  ![image](https://github.com/SinghProbjot/Stage/assets/102951324/fcd24b91-9d68-4110-a7c7-1c1699dc135b)
+
 - Utilizzata soluzione con API Google Safe Browsing, quando viene effettuata una webrequest, viene effettuata la richiesta api, ma incontro problemi col testing, dato che tutti gli url di phishing già individuati sono già stati bloccati, quindi l'api non dà risposta. Serve trovare altri siti per testing.
 - Inoltre SafeBrowsing non dà alcuno score reputazionale, quindi sto individuando altre api gratuite da utilizzare per avere le informazioni mancanti.
 - Oltre ad intercettare le richieste e valutarle, ora l'estensione è in grado di raccogliere tutti gli url presenti nella pagina web visitata, e di inviarli alla stessa api per la valutazione di essi. Questo viene fatto mediante un listener presente nel content.js, poichè solo lui ha accesso al DOM, e quando una pagina viene caricata, viene richiamata una funzione che interviene sul document, cercando tutti gli url. Infine, tramite scambio di messaggi, i link trovati vengono inviati al service-worker che è in ascolto, ed effettua la richiesta api a Safe Browsing con l'url ricevuto, valutandone il rischio.
+  Controllo pagina:
+    ![image](https://github.com/SinghProbjot/Stage/assets/102951324/c5aa487d-2916-41ea-9b97-27ae0245401a)
+  Ricezione url e controllo:
+    ![image](https://github.com/SinghProbjot/Stage/assets/102951324/cc069d4e-6dc9-4cd4-b924-e942a3274dcb)
