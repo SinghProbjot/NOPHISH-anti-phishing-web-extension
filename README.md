@@ -43,3 +43,10 @@ ________________________________________________________________________________
     ![image](https://github.com/SinghProbjot/Stage/assets/102951324/c5aa487d-2916-41ea-9b97-27ae0245401a)
   Ricezione url e controllo:
     ![image](https://github.com/SinghProbjot/Stage/assets/102951324/cc069d4e-6dc9-4cd4-b924-e942a3274dcb)
+
+- Integrazione con altre fonti di reputazione di url: IPQualityscore, e tentativo di connessione ad una blacklist di url, di phishtank, trovata in rete.
+  
+- Rielaborazione dell'architettura, riorganizzazione del codice, per non dover accumulare il tutto dentro un unica funzione, ma implementando delle classi, che hanno delle responsabiulità, nel mio caso era presente un unica funzione, "check-url" a cui veniva passato un url, e questo lo valutava, utilizzando le varie sorgenti reputazionali. ora questo non è più gestito dalla funzione, poichè in futuro potrebbe esseci bisogno di aggiornare il software con nuove sorgenti repuitazionali, e ci sarebbe stato bisogno di andare a mettere mano a tutto il codice, sistemandone il funzionamento. E' stata ora implememtata un'interfaccia generica che ha il compito di valutare la validità o meno di un url, quindi che risponde solo true o false, e dentro questa vengono implementate tutte le fonti di reputazione, e l'oggetto validator le applica tutte sequenzialmente, e quando trova che una delle fonti, ne basta solo una, risponde con false, cioè che l'url non è safe, significa che è pericoloso, e questa risposta è quella che viene ricevuta dal servuce-worker, quando chiede al validator la reputazione di un determinato url.
+
+        UPDATE: l'api IPQualityscore non funziona, per le politiche CORS non risponde.
+
