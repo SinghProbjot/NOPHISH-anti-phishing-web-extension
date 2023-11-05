@@ -51,3 +51,5 @@ ________________________________________________________________________________
         UPDATE: l'api IPQualityscore non funziona, per le politiche CORS non risponde.
 
 - Introdotto un controllo sull'url, prima che questo sia validato, poichè testando, ho incontrato dei tag href, che però non sono degli url, poichè sono dei collegamenti a delle posizioni nella stessa pagina. L'url viene controllato, in caso sia parsabile al tipo "URL", viene inviato.
+
+- gestione dei dati: anche per questi aggiunta un implementazione tramite oggetti, l'oggetto LocalRepiutationDataSource gestisce i dati in locale, quelli che prima erano in un array globale, ed è stata definita, non ancora implementata la classe che gestisce i dati tramite un database.
