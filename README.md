@@ -50,3 +50,4 @@ ________________________________________________________________________________
 
         UPDATE: l'api IPQualityscore non funziona, per le politiche CORS non risponde.
 
+- Introdotto un controllo sull'url, prima che questo sia validato, poichè testando, ho incontrato dei tag href, che però non sono degli url, poichè sono dei collegamenti a delle posizioni nella stessa pagina. L'url viene controllato, in caso sia parsabile al tipo "URL", viene inviato.
