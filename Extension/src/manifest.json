@@ -1,0 +1,28 @@
+{
+    "manifest_version": 3,
+    "name": "Anti Phishing P.Singh",
+    "version": "1.0.0",
+    "background": {
+        "service_worker": "service-worker.ts",
+        "type": "module"
+    },
+    "content_scripts": [
+        {
+            "js": ["content.ts"],
+            "matches": ["<all_urls>"]
+        }
+    ],
+    "permissions": [
+        "webRequest",
+        "webNavigation",
+        "notifications",
+        "tabs",
+        "activeTab",
+        "scripting",
+        "storage",
+        "declarativeNetRequest",
+        "declarativeNetRequestFeedback",
+        "alarms"
+    ],
+    "host_permissions": ["<all_urls>"]
+}

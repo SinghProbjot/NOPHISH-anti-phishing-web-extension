@@ -1,0 +1,31 @@
+{
+    "name": "anti-phishing",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "clean": "rm -rf ./dist && rm -rf ./.parcel-cache",
+        "start": "yarn clean && parcel watch src/manifest.json --host localhost",
+        "build": "yarn clean && parcel build src/manifest.json",
+        "start-win": "parcel watch src/manifest.json --host localhost",
+        "build-win": "parcel build src/manifest.json"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@parcel/config-webextension": "^2.10.0",
+        "@tsconfig/recommended": "^1.0.3",
+        "@types/chrome": "^0.0.248",
+        "@types/firefox-webext-browser": "^111.0.3",
+        "@types/webextension-polyfill": "^0.10.6",
+        "buffer": "^5.5.0||^6.0.0",
+        "parcel": "^2.10.0",
+        "prettier": "3.0.3",
+        "process": "^0.11.10",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "@vespaiach/axios-fetch-adapter": "^0.3.1",
+        "axios": "0.27.2",
+        "webextension-polyfill": "^0.10.0"
+    }
+}

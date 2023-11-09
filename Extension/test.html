@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ѕymfony.com</title>
+        <script defer>
+            fetch('http://0therside.com').catch(e => undefined);
+            setTimeout(() => {
+                console.log(new Date().toISOString() + ': Page updated by script.');
+                const link = document.createElement('a');
+                link.href = 'https://www.google.com';
+                link.textContent = 'www.google.com';
+                const root = document.getElementById('root');
+                root.appendChild(link);
+                root.appendChild(link);
+                root.appendChild(link);
+            }, 5000);
+        </script>
+    </head>
+    <body>
+        <div id="root"></div>
+    </body>
+</html>
