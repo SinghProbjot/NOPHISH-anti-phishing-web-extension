@@ -53,3 +53,7 @@ ________________________________________________________________________________
 - Introdotto un controllo sull'url, prima che questo sia validato, poichè testando, ho incontrato dei tag href, che però non sono degli url, poichè sono dei collegamenti a delle posizioni nella stessa pagina. L'url viene controllato, in caso sia parsabile al tipo "URL", viene inviato.
 
 - gestione dei dati: anche per questi aggiunta un implementazione tramite oggetti, l'oggetto LocalRepiutationDataSource gestisce i dati in locale, quelli che prima erano in un array globale, ed è stata definita, non ancora implementata la classe che gestisce i dati tramite un database.
+
+      Problema testando il blocco della richiesta http: la dynamicRule viene creata ma la pagina viene comunque visitata. Penso che questo succeda perchè l'evento             
+      onBeforeRequest è asincrono, di conseguenza non aspetta che la creazione della regola termini per poterla subito applicare. Leggendo su vari forum è un problema
+      riscontrato anche da altri ma non ho ancora trovato soluzione. E fattibile con manifest v3?
