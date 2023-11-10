@@ -1,4 +1,4 @@
-import {logD, Message} from './core';
+import {logD, logE, Message} from './core';
 import Browser from 'webextension-polyfill';
 
 logD('Extension content script loaded.');
@@ -50,12 +50,15 @@ Browser.runtime.onMessage.addListener((message: Boolean, sender, sendResponse) =
 function checkPage(): string[] {
     const links: string[] = [];
     const anchors = document.querySelectorAll('a');
-    anchors.forEach(anchor => {
+    for (const anchor of anchors) {
         const href = anchor.getAttribute('href') ?? '';
-        if (href && URL.canParse(href)) {
+        try {
+            new URL(href);
             links.push(href);
+        } catch (error) {
+            logE(error);
         }
-    });
+    }
     //links.splice(0, 1);
     console.log('lINK TROVATI: ', links);
     return links;
