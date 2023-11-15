@@ -59,3 +59,4 @@ ________________________________________________________________________________
       riscontrato anche da altri ma non ho ancora trovato soluzione. E fattibile con manifest v3?
   
 - Downgrade a manifest v2, per gestire nel modo corretto il blocco di richieste tramite webrequest api, aggiornamento dei metodi
+- Whitelisting: https://moz.com/top500
