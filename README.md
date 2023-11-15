@@ -57,3 +57,5 @@ ________________________________________________________________________________
       Problema testando il blocco della richiesta http: la dynamicRule viene creata ma la pagina viene comunque visitata. Penso che questo succeda perchè l'evento             
       onBeforeRequest è asincrono, di conseguenza non aspetta che la creazione della regola termini per poterla subito applicare. Leggendo su vari forum è un problema
       riscontrato anche da altri ma non ho ancora trovato soluzione. E fattibile con manifest v3?
+  
+- Downgrade a manifest v2, per gestire nel modo corretto il blocco di richieste tramite webrequest api, aggiornamento dei metodi
