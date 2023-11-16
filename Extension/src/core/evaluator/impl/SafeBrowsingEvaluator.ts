@@ -1,9 +1,9 @@
 import {AxiosInstance} from 'axios';
 import {SafeBrowsing} from '../../api/types';
-import {Validator} from '../Validator';
+import {Evaluator} from '../Evaluator';
 import {logD} from '../../misc';
 
-export class SafeBrowsingValidator implements Validator {
+export class SafeBrowsingEvaluator implements Evaluator {
     readonly BASE_URL = 'https://safebrowsing.googleapis.com/v4/threatMatches:find';
     readonly API_KEY: string;
     readonly apiInstance: AxiosInstance;
@@ -13,16 +13,20 @@ export class SafeBrowsingValidator implements Validator {
         this.apiInstance = apiInstance;
     }
 
-    async validate(url: URL): Promise<boolean> {
+    async evaluate(url: URL): Promise<number> {
         // TODO HANDLE ERRORS
-        const dangerousUrls = await this.checkUrls([url.toString()]);
+        try {
+            const dangerousUrls = await this.checkUrls([url.toString()]);
 
-        logD(`SafeBrowsingValidator: validate(): ${dangerousUrls.length > 0 ? 'Danger' : 'Safe'}`);
+            logD(`SafeBrowsingValidator: validate(): ${dangerousUrls.length > 0 ? 'Danger' : 'Safe'}`);
 
-        return dangerousUrls.length === 0;
+            return dangerousUrls.length === 0 ? 100 : 0;
+        } catch (error) {
+            return -1;
+        }
     }
 
-    async checkUrls(urls: string[]) {
+    protected async checkUrls(urls: string[]) {
         const requestBody: SafeBrowsing.RequestBody = {
             client: {
                 clientId: 'test-prob-anti-pishing-client-1-0-0',

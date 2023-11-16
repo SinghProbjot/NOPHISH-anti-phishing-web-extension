@@ -16,16 +16,23 @@
         "@tsconfig/recommended": "^1.0.3",
         "@types/chrome": "^0.0.248",
         "@types/firefox-webext-browser": "^111.0.3",
+        "@types/node": "^20.9.0",
         "@types/webextension-polyfill": "^0.10.6",
         "buffer": "^5.5.0||^6.0.0",
+        "events": "^3.1.0",
         "parcel": "^2.10.0",
         "prettier": "3.0.3",
         "process": "^0.11.10",
+        "stream-browserify": "^3.0.0",
         "typescript": "^5.2.2"
     },
     "dependencies": {
         "@vespaiach/axios-fetch-adapter": "^0.3.1",
         "axios": "0.27.2",
+        "csv-parse": "^5.5.2",
+        "csv-parser": "^3.0.0",
+        "dexie": "^3.2.4",
+        "fs": "^0.0.1-security",
         "webextension-polyfill": "^0.10.0"
     }
 }

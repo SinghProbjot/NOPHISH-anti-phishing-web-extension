@@ -19,10 +19,10 @@ interface CheckPageMessage extends BaseMessage {
 export type Message = CheckUrlMessage | CheckPageMessage;
 
 /**
- * Informazioni reputazionali di un host
+ * Informazioni reputazionali di un url
  */
 export type Reputation = {
-    host: string;
+    url: string;
     score: number;
     userSafeMarked: boolean;
 };

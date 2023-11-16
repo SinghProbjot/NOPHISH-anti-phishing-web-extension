@@ -1,15 +1,16 @@
 import {ReputationDataSource} from '../ReputationDataSource';
 import {Reputation} from '../../types';
+import {Database} from '../Database';
 
 export class DbReputationDataSource implements ReputationDataSource {
-    readonly db: any;
+    readonly db: Database;
 
     constructor() {
-        this.db = {};
+        this.db = new Database();
     }
 
     addReputation(rep: Reputation): void {
-        throw new Error('Method not implemented.');
+        this.addReputationAsync(rep);
     }
 
     getReputation(url: string): Reputation | null {
@@ -21,10 +22,10 @@ export class DbReputationDataSource implements ReputationDataSource {
     }
 
     async addReputationAsync(rep: Reputation): Promise<void> {
-        throw new Error('Method not implemented.');
+        await this.db.reputations.put(rep);
     }
 
     async getReputationAsync(url: string): Promise<Reputation | null> {
-        throw new Error('Method not implemented.');
+        return (await this.db.reputations.where('url').equals(url).first()) ?? null;
     }
 }
