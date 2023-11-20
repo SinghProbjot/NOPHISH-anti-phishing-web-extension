@@ -10,14 +10,14 @@ export class LocalReputationDataSource implements ReputationDataSource {
     }
 
     getReputation(url: string): Reputation | null {
-        return this.reputations.find(rep => rep.host === url) ?? null;
+        return this.reputations.find(rep => rep.url === url) ?? null;
     }
 
     getReputationsByDistance(url: string, min: number, max: number): Reputation[] {
         const reputations: Reputation[] = [];
 
         for (let reputation of this.reputations) {
-            const distance = levenshteinDistance(url, reputation.host);
+            const distance = levenshteinDistance(url, reputation.url);
             if (distance >= min && distance <= max) {
                 reputations.push(reputation);
             }
@@ -27,7 +27,7 @@ export class LocalReputationDataSource implements ReputationDataSource {
     }
 
     addReputation(rep: Reputation) {
-        if (this.getReputation(rep.host)) return;
+        if (this.getReputation(rep.url)) return;
 
         this.reputations.push(rep);
     }
