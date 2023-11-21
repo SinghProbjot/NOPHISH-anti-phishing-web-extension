@@ -1,6 +1,6 @@
 import {AxiosInstance} from 'axios';
 import {IPQuality} from '../../api/types';
-import {Evaluator} from '../Evaluator';
+import {Evaluator, EvaluatorInput} from '../Evaluator';
 import {logD} from '../../misc';
 
 export class IPQualityEvaluator implements Evaluator {
@@ -13,7 +13,11 @@ export class IPQualityEvaluator implements Evaluator {
         this.apiInstance = apiInstance;
     }
 
-    async evaluate(url: URL): Promise<number> {
+    async evaluate({url, isPrimary}: EvaluatorInput): Promise<number> {
+        if (!isPrimary) {
+            return -1;
+        }
+
         // TODO HANDLE ERRORS
         const riskScore = await this.checkUrl(url);
 

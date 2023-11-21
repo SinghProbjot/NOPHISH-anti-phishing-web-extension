@@ -939,6 +939,11 @@
   dependencies:
     undici-types "~5.26.4"
 
+"@types/punycode@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@types/punycode/-/punycode-2.1.2.tgz#f1193619a4ff42a146f584284fb1d65061464081"
+  integrity sha512-KKQ4GjRCpswGPA6ZfvPrC+7h84bAvPkU1kFGJ3FuQOgZIEc8JmO1jcDCaxSiYcN3qzOOp9YqHq+njKEO3Q4BnA==
+
 "@types/webextension-polyfill@^0.10.6":
   version "0.10.6"
   resolved "https://registry.yarnpkg.com/@types/webextension-polyfill/-/webextension-polyfill-0.10.6.tgz#9ca8dc3e2cabf79b73538be921ef6ce69d6d62b3"
@@ -1672,6 +1677,11 @@ process@^0.11.10:
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==
+
+punycode@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
+  integrity sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==
 
 react-error-overlay@6.0.9:
   version "6.0.9"

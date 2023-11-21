@@ -1,6 +1,6 @@
 import {AxiosInstance} from 'axios';
 import {SafeBrowsing} from '../../api/types';
-import {Evaluator} from '../Evaluator';
+import {Evaluator, EvaluatorInput} from '../Evaluator';
 import {logD} from '../../misc';
 
 export class SafeBrowsingEvaluator implements Evaluator {
@@ -13,7 +13,7 @@ export class SafeBrowsingEvaluator implements Evaluator {
         this.apiInstance = apiInstance;
     }
 
-    async evaluate(url: URL): Promise<number> {
+    async evaluate({url}: EvaluatorInput): Promise<number> {
         // TODO HANDLE ERRORS
         try {
             const dangerousUrls = await this.checkUrls([url.toString()]);

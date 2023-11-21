@@ -1,7 +1,6 @@
 export const logD = (...data: any[]) => console.log(`${new Date().toISOString()}: `, ...data);
 export const logI = (...data: any[]) => console.info(`${new Date().toISOString()}: `, ...data);
 export const logE = (...data: any[]) => console.error(`${new Date().toISOString()}: `, ...data);
-
 export function levenshteinDistance(a: string, b: string): number {
     const an = a ? a.length : 0;
     const bn = b ? b.length : 0;

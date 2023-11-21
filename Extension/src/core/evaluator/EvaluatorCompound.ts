@@ -1,4 +1,4 @@
-import {Evaluator} from './Evaluator';
+import {Evaluator, EvaluatorInput} from './Evaluator';
 
 export class EvaluatorCompound implements Evaluator {
     readonly evaluators: Evaluator[];
@@ -7,11 +7,11 @@ export class EvaluatorCompound implements Evaluator {
         this.evaluators = evaluators;
     }
 
-    async evaluate(url: URL): Promise<number> {
+    async evaluate(data: EvaluatorInput): Promise<number> {
         let scores: number[] = [];
 
         for (const evaluator of this.evaluators) {
-            const score = await evaluator.evaluate(url);
+            const score = await evaluator.evaluate(data);
             scores.push(score);
         }
         if (scores.length === 0) {

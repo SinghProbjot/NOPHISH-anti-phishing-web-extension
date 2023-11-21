@@ -23,10 +23,12 @@
         "parcel": "^2.10.0",
         "prettier": "3.0.3",
         "process": "^0.11.10",
+        "punycode": "^1.4.1",
         "stream-browserify": "^3.0.0",
         "typescript": "^5.2.2"
     },
     "dependencies": {
+        "@types/punycode": "^2.1.2",
         "@vespaiach/axios-fetch-adapter": "^0.3.1",
         "axios": "0.27.2",
         "csv-parse": "^5.5.2",

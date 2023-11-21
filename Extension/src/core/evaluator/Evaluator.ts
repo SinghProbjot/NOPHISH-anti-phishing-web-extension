@@ -1,3 +1,5 @@
 export interface Evaluator {
-    evaluate(url: URL): Promise<number>;
+    evaluate(data: EvaluatorInput): Promise<number>;
 }
+
+export type EvaluatorInput = {url: URL; isPrimary: boolean};

@@ -7,7 +7,7 @@ import {ValidatorManager} from './core/validator/ValidatorManager';
 import {PhishTankValidator, SafeBrowsingValidator} from './core/validator/impl';
 import {parse} from 'csv-parse/lib/sync';
 import {Evaluator, EvaluatorCompound} from './core/evaluator';
-import {PhishTankEvaluator, SafeBrowsingEvaluator} from './core/evaluator/impl';
+import {PhishTankEvaluator, SafeBrowsingEvaluator, syntacticCheckEvaluator} from './core/evaluator/impl';
 
 const reputations: ReputationDataSource = new DbReputationDataSource();
 const validator = new ValidatorManager([
@@ -19,6 +19,7 @@ const evaluator: Evaluator = new EvaluatorCompound([
     new PhishTankEvaluator(),
     new SafeBrowsingEvaluator('AIzaSyCGFq-OQDTuTN__iaigu0b7R-HyoGTeIsE', api),
     //new IPQualityValidator('VWs8ZZcEReDT4BbDPMgw5xejsbfdlTk8', api),
+    new syntacticCheckEvaluator(),
 ]);
 
 /**
@@ -26,16 +27,16 @@ const evaluator: Evaluator = new EvaluatorCompound([
  * @param rep
  * @returns
  */
-const isUrlSafe = (rep: Reputation) => rep.userSafeMarked || rep.score > 80;
+const isUrlSafe = (rep: Reputation) => rep.userSafeMarked || rep.score > 85;
 
-const checkUrl = async (url: URL) => {
+const checkUrl = async (url: URL, isPrimary: boolean) => {
     const origin = url.origin;
 
     let rep = await reputations.getReputationAsync(origin);
     if (!rep) {
         //se non esiste già una reputazione
         try {
-            const score = await evaluator.evaluate(url);
+            const score = await evaluator.evaluate({url, isPrimary});
             rep = {
                 url: origin,
                 score,
@@ -99,19 +100,6 @@ const reduceHost = (host: string): string => {
 
     return host;
 };
-//quanto un url è visitato
-async function getUrlVisitCount(url: string) {
-    const visits = await browser.history.getVisits({url});
-
-    let visitCount = 0;
-    for (const visit of visits) {
-        if (visit.transition !== 'reload') {
-            visitCount++;
-        }
-    }
-
-    return visitCount;
-}
 
 Browser.runtime.onInstalled.addListener(async ({reason}) => {
     logD(`SW: onInstalled() - reason: ${reason}`);
@@ -149,7 +137,8 @@ Browser.webRequest.onBeforeRequest.addListener(
         logD('SW: onBeforeRequest()');
 
         const url = new URL(request.url);
-        const safe = await checkUrl(url);
+        const safe = await checkUrl(url, true);
+        if (!safe) alert('This website is dangerous!');
         return {cancel: !safe};
     },
     {
@@ -176,10 +165,11 @@ Browser.runtime.onMessage.addListener(async (message: Message, sender, sendRespo
     switch (message.type) {
         case 'check-url':
             logD(`SW: onMessage() - type: check-url - url: ${message.payload.url}.`);
-            checkUrl(new URL(message.payload.url)) //controllo dell'url
+            checkUrl(new URL(message.payload.url), false) //controllo dell'url
                 .then(isSafe => {
                     if (!isSafe) {
                         // notifica utente
+                        alert('This website is dangerous!');
                         Browser.notifications.create(undefined, {
                             type: 'basic',
                             iconUrl: new URL('./assets/iconr.png', import.meta.url).toString(), //Browser.runtime.getURL('iconr.png'),
