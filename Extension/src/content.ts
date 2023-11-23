@@ -18,6 +18,11 @@ window.addEventListener('load', () => {
         };
         Browser.runtime.sendMessage(message);
     });
+    // Increase the total website count
+    chrome.storage.local.get({totalWebsiteCount: 0}, function (data) {
+        data.totalWebsiteCount++;
+        chrome.storage.local.set({totalWebsiteCount: data.totalWebsiteCount});
+    });
 });
 
 /*

@@ -7,7 +7,12 @@ import {ValidatorManager} from './core/validator/ValidatorManager';
 import {PhishTankValidator, SafeBrowsingValidator} from './core/validator/impl';
 import {parse} from 'csv-parse/lib/sync';
 import {Evaluator, EvaluatorCompound} from './core/evaluator';
-import {PhishTankEvaluator, SafeBrowsingEvaluator, syntacticCheckEvaluator} from './core/evaluator/impl';
+import {
+    IPQualityEvaluator,
+    PhishTankEvaluator,
+    SafeBrowsingEvaluator,
+    syntacticCheckEvaluator,
+} from './core/evaluator/impl';
 
 const reputations: ReputationDataSource = new DbReputationDataSource();
 const validator = new ValidatorManager([
@@ -18,7 +23,7 @@ const validator = new ValidatorManager([
 const evaluator: Evaluator = new EvaluatorCompound([
     new PhishTankEvaluator(),
     new SafeBrowsingEvaluator('AIzaSyCGFq-OQDTuTN__iaigu0b7R-HyoGTeIsE', api),
-    //new IPQualityValidator('VWs8ZZcEReDT4BbDPMgw5xejsbfdlTk8', api),
+    //new IPQualityEvaluator('VWs8ZZcEReDT4BbDPMgw5xejsbfdlTk8', api),
     new syntacticCheckEvaluator(),
 ]);
 
@@ -103,7 +108,6 @@ const reduceHost = (host: string): string => {
 
 Browser.runtime.onInstalled.addListener(async ({reason}) => {
     logD(`SW: onInstalled() - reason: ${reason}`);
-
     // const manifest = Browser.runtime.getManifest();
     // const contentScripts = manifest.content_scripts;
     // if (!contentScripts) return;
@@ -128,7 +132,9 @@ Browser.runtime.onInstalled.addListener(async ({reason}) => {
             userSafeMarked: false,
         });
     }
-
+    chrome.storage.sync.set({enabled: true}, function () {
+        console.log('The extension is enabled.');
+    });
     syncPhishTankDb();
 });
 
@@ -138,7 +144,13 @@ Browser.webRequest.onBeforeRequest.addListener(
 
         const url = new URL(request.url);
         const safe = await checkUrl(url, true);
-        if (!safe) alert('This website is dangerous!');
+        if (!safe) {
+            alert('This website is dangerous!');
+            chrome.storage.local.get({dangerousWebsiteCount: 0}, function (data) {
+                data.dangerousWebsiteCount++;
+                chrome.storage.local.set({dangerousWebsiteCount: data.dangerousWebsiteCount});
+            });
+        }
         return {cancel: !safe};
     },
     {

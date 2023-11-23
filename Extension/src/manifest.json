@@ -2,11 +2,6 @@
     "manifest_version": 2,
     "name": "Anti Phishing P.Singh",
     "version": "1.5.0",
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "anti-phishing-singh"
-        }
-    },
     "background": {
         "persistent": true,
         "scripts": ["background.ts"]
@@ -23,6 +18,7 @@
         "webRequest",
         "webRequestBlocking",
         "notifications",
+        "history",
         "alarms",
         "tabs",
         "activeTab",
@@ -30,6 +26,7 @@
         "<all_urls>"
     ],
     "browser_action": {
+        "default_popup": "popup.html",
         "default_icon": {
             "16": "assets/iconr.png"
         }

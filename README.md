@@ -61,3 +61,11 @@
 - Utilizzo di Dexie.js, per l'accesso all'IndexedDb, dove vengono salvate e lette tutte le reputazioni. I campi che vengono salvati sono gli stessi che venivano salvati prima in locale, quindi consiste in una sola tabella, che contiene url, lo score, e se è stato markato(boolean).
 
 - Migliorata la logica dello score, che prima era simulato, ma ora ogni validator(evaluator) ha un proprio modo di gestire lo score, dato che le sorgenti interpretano la risposta in modo diverso, quindi ogni sorgente, anzichè rispondere se un url è safe o meno, ora ha la responsabilità di tornare uno score, e alla fine viene fatta una media degli score dal Manager.
+
+- Aggiunta nuova fonte di reputazione degli url: la sintassi. Utilizzo della libreria punycode.js per decodificare i caratteri punycode in unicode, così da confrontare l'url decodificato, con quello originario: se risultano diversi, cioè l'url è punycode, è potenzialmente dannoso.
+
+- Controllo sugli ip: SafeBrosing, funziona con due liste contenenti url, gli ip a quanto pare non vengono valutati, di conseguenza la mia estensione li vedrebbe come sicuri, quando potrebbero essere pericolosi. Per ora un Ip è pericoloso.
+
+- Implementazione dell'analisi della history del browser, per studiare il numero di visite di un url. per ora è da valutarne l'utilità e la correttezza.
+
+- Aggiunta una prima interfaccia grafica, da migiliorare successivamente, Soprattutto la notifica quando si incontra un url pericoloso, che per ora è un semplice alert.
