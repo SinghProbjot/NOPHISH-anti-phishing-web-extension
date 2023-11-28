@@ -14,14 +14,14 @@ import {
     syntacticCheckEvaluator,
 } from './core/evaluator/impl';
 
-const reputations: ReputationDataSource = new DbReputationDataSource();
+export const reputations: ReputationDataSource = new DbReputationDataSource();
 const validator = new ValidatorManager([
     new PhishTankValidator(),
     new SafeBrowsingValidator('AIzaSyCGFq-OQDTuTN__iaigu0b7R-HyoGTeIsE', api),
     //new IPQualityValidator('VWs8ZZcEReDT4BbDPMgw5xejsbfdlTk8', api),
 ]);
 const evaluator: Evaluator = new EvaluatorCompound([
-    new PhishTankEvaluator(),
+    //new PhishTankEvaluator(),
     new SafeBrowsingEvaluator('AIzaSyCGFq-OQDTuTN__iaigu0b7R-HyoGTeIsE', api),
     //new IPQualityEvaluator('VWs8ZZcEReDT4BbDPMgw5xejsbfdlTk8', api),
     new syntacticCheckEvaluator(),
@@ -135,6 +135,10 @@ Browser.runtime.onInstalled.addListener(async ({reason}) => {
     chrome.storage.sync.set({enabled: true}, function () {
         console.log('The extension is enabled.');
     });
+    const yesterday = new Date().getDate() - 1; //prima volta setto a ieri, cosi posso sincronizzare
+    chrome.storage.sync.set({lastUpdate: yesterday}, function () {
+        console.log('updating phishtank');
+    });
     syncPhishTankDb();
 });
 
@@ -182,12 +186,12 @@ Browser.runtime.onMessage.addListener(async (message: Message, sender, sendRespo
                     if (!isSafe) {
                         // notifica utente
                         alert('This website is dangerous!');
-                        Browser.notifications.create(undefined, {
-                            type: 'basic',
-                            iconUrl: new URL('./assets/iconr.png', import.meta.url).toString(), //Browser.runtime.getURL('iconr.png'),
-                            title: 'Safety Notification',
-                            message: 'content',
-                        });
+                        // Browser.notifications.create(undefined, {
+                        //     type: 'basic',
+                        //     iconUrl: new URL('./assets/iconr.png', import.meta.url).toString(), //Browser.runtime.getURL('iconr.png'),
+                        //     title: 'Safety Notification',
+                        //     message: 'content',
+                        // });
                     } else {
                         console.log('safe url.');
                     }

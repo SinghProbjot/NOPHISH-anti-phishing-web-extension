@@ -25,36 +25,43 @@ export class syntacticCheckEvaluator implements Evaluator {
     }
     //quanto un url è visitato
     protected async getUrlVisitCount(Url: string) {
-        /*const visits = await chrome.history.getVisits({
-            url: url,
-        });
         let visitCount = 0;
-        for (const visit of visits) {
-            if (visit.transition !== 'reload') {
-                visitCount++;
-            }
-        }
+        chrome.history.getVisits({url: Url}, function (visit) {
+            visit.forEach(element => {
+                if (element.transition !== 'reload') {
+                    visitCount++;
+                }
+            });
+        });
+        console.log('TOTAL VISITS:     ' + visitCount);
+        // const visits = await chrome.history.getVisits({url: Url}, function ());
+        // let visitCount = 0;
+        // for (const visit of visits) {
+        //     if (visit.transition !== 'reload') {
+        //         visitCount++;
+        //     }
+        // }
 
         return visitCount;
 
-        var histories = [];
-        var visits = [];
+        // var histories = [];
+        // var visitss = [];
 
-        chrome.history.search({text: '', maxResults: 0}, function (historyItems) {
-            var historiesProcessed = 0;
-            for (var i = 0; i < historyItems.length; i++) {
-                histories.push(historyItems[i]);
-                chrome.history.getVisits({url: historyItems[i].url}, function (visitItems) {
-                    for (var i = 0; i < visitItems.length; i++) {
-                        visits.push(visitItems[i]);
-                    }
-                    historiesProcessed++;
-                    if (historiesProcessed === historyItems.length) {
-                        console.log(visits.length + ' visits');
-                    }
-                });
-            }
-            console.log(histories.length + ' histories');
-        });*/
+        // chrome.history.search({text: '', maxResults: 0}, function (historyItems) {
+        //     var historiesProcessed = 0;
+        //     for (var i = 0; i < historyItems.length; i++) {
+        //         histories.push(historyItems[i]);
+        //         chrome.history.getVisits({url: historyItems[i].url}, function (visitItems) {
+        //             for (var i = 0; i < visitItems.length; i++) {
+        //                 visits.push(visitItems[i]);
+        //             }
+        //             historiesProcessed++;
+        //             if (historiesProcessed === historyItems.length) {
+        //                 console.log(visits.length + ' visits');
+        //             }
+        //         });
+        //     }
+        //     console.log(histories.length + ' histories');
+        // });
     }
 }

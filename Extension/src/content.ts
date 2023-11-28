@@ -5,7 +5,7 @@ logD('Extension content script loaded.');
 
 window.addEventListener('load', () => {
     logD('Window loaded: ' + window.location.hostname);
-    if (window.location.hostname.startsWith('localhost')) {
+    if (window.location.hostname.startsWith('localhost') || window.location.hostname.startsWith('chrome://')) {
         return;
     }
     const received: string[] = checkPage();

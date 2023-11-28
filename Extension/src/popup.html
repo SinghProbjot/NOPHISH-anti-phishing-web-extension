@@ -23,6 +23,7 @@
                 box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
                 overflow: hidden;
                 padding: 20px;
+                margin-bottom: 10px;
             }
 
             img {
@@ -45,6 +46,18 @@
             .statistics p {
                 margin: 5px 0;
                 font-weight: bold;
+            }
+
+            label {
+                border: none;
+                padding: 8px;
+                margin: 0 0 10px;
+                display: block;
+            }
+
+            label:hover {
+                /* background: #eee; */
+                cursor: pointer;
             }
 
             button {
@@ -98,6 +111,7 @@
             <p>Checking Domain safety...</p>
         </div>
         <button id="toggleBtn">Enable Extension</button>
+        <label><input type="checkbox" name="checkbox" value="value" />Mark as safe</label>
         <div class="statistics">
             <p id="totalWebsiteCount">Total websites visited: 0</p>
             <p id="dangerousWebsiteCount">Dangerous requests blocked: 0</p>
