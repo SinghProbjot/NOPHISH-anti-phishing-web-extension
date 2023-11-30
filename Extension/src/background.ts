@@ -175,7 +175,7 @@ Browser.webRequest.onBeforeRequest.addListener(
                 data.dangerousWebsiteCount++;
                 chrome.storage.local.set({dangerousWebsiteCount: data.dangerousWebsiteCount});
             });
-            chrome.tabs.update(request.tabId, {url: new URL('../test.html', import.meta.url).toString()});
+            chrome.tabs.update(request.tabId, {url: new URL('./warn.html', import.meta.url).toString()});
         }
 
         return {cancel: !safe};
@@ -188,7 +188,7 @@ Browser.webRequest.onBeforeRequest.addListener(
 );
 Browser.webRequest.onCompleted.addListener(
     request => {
-        if (!saf) chrome.tabs.update(request.tabId, {url: new URL('../test.html', import.meta.url).toString()});
+        if (!saf) chrome.tabs.update(request.tabId, {url: new URL('./warn.html', import.meta.url).toString()});
         saf = true;
         return;
     },
