@@ -3,7 +3,7 @@ import {Evaluator, EvaluatorInput} from '../Evaluator';
 //const punycode = require('punycode/');
 import {encode, toUnicode} from 'punycode';
 import {logD} from '../../misc';
-
+import {isIPAddress} from 'ip-address-validator';
 export class syntacticCheckEvaluator implements Evaluator {
     async evaluate({url}: EvaluatorInput): Promise<number> {
         let score = 0;
@@ -11,15 +11,16 @@ export class syntacticCheckEvaluator implements Evaluator {
         //se sono diversi non va bene
         //let visits = await this.getUrlVisitCount(url.toString());
         if (encoded != url.toString()) console.log('punycode!');
-        if (encoded != url.toString() || this.isIP(url.toString())) score = 0;
+        console.log('url restricted: ' + url.origin.toString().substring(8));
+        if (encoded != url.toString() || this.isIP(url.origin.toString().substring(8))) score = 0;
         else score = 100;
         //if (visits < 3) score = (score + 85) / 2;
         logD(`SyntaxValidator: evaluate(): score ==> ` + score);
         return score;
     }
-
     protected isIP(url: string): boolean {
-        let reg = /\d{1,3}[\.]{1}\d{1,3}[\.]{1}\d{1,3}[\.]{1}\d{1,3}/;
+        let reg =
+            /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
         if (reg.exec(url) == null) {
             return false;
         } else {

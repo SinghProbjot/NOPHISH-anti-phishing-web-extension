@@ -25,9 +25,11 @@
         "process": "^0.11.10",
         "punycode": "^1.4.1",
         "stream-browserify": "^3.0.0",
-        "typescript": "^5.2.2"
+        "typescript": "^5.2.2",
+        "vm-browserify": "^1.1.2"
     },
     "dependencies": {
+        "@types/is-ip": "^3.0.0",
         "@types/punycode": "^2.1.2",
         "@vespaiach/axios-fetch-adapter": "^0.3.1",
         "axios": "0.27.2",
@@ -35,6 +37,7 @@
         "csv-parser": "^3.0.0",
         "dexie": "^3.2.4",
         "fs": "^0.0.1-security",
+        "ip-address-validator": "^1.0.10",
         "webextension-polyfill": "^0.10.0"
     }
 }
