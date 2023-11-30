@@ -2,29 +2,39 @@ import {logD, logE, Message} from './core';
 import Browser from 'webextension-polyfill';
 
 logD('Extension content script loaded.');
-
-window.addEventListener('load', () => {
-    logD('Window loaded: ' + window.location.hostname);
-    if (window.location.hostname.startsWith('localhost') || window.location.hostname.startsWith('chrome://')) {
-        return;
+chrome.storage.sync.get({enabled: true}, function (data) {
+    if (data.enabled) {
+        run();
     }
-    const received: string[] = checkPage();
-    received.forEach(element => {
-        const message: Message = {
-            type: 'check-url',
-            payload: {
-                url: element,
-            },
-        };
-        Browser.runtime.sendMessage(message);
-    });
-    // Increase the total website count
-    chrome.storage.local.get({totalWebsiteCount: 0}, function (data) {
-        data.totalWebsiteCount++;
-        chrome.storage.local.set({totalWebsiteCount: data.totalWebsiteCount});
-    });
 });
 
+function run() {
+    window.addEventListener('load', () => {
+        logD('Window loaded: ' + window.location.hostname);
+        if (
+            window.location.hostname.startsWith('localhost') ||
+            window.location.hostname.startsWith('chrome://') ||
+            window.location.hostname.startsWith('https://chrome://')
+        ) {
+            return;
+        }
+        const received: string[] = checkPage();
+        received.forEach(element => {
+            const message: Message = {
+                type: 'check-url',
+                payload: {
+                    url: element,
+                },
+            };
+            Browser.runtime.sendMessage(message);
+        });
+        // Increase the total website count
+        chrome.storage.local.get({totalWebsiteCount: 0}, function (data) {
+            data.totalWebsiteCount++;
+            chrome.storage.local.set({totalWebsiteCount: data.totalWebsiteCount});
+        });
+    });
+}
 /*
 Browser.runtime.onMessage.addListener((message: Boolean, sender, sendResponse) => {
     let content = ' ';

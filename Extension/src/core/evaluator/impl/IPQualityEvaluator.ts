@@ -23,7 +23,7 @@ export class IPQualityEvaluator implements Evaluator {
 
         logD(`IPQualityValidator: validate(): ${riskScore}`);
 
-        return riskScore;
+        return 100 - riskScore;
     }
 
     protected async checkUrl(url: URL) {

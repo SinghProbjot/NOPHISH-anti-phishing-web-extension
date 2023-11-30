@@ -13,6 +13,7 @@ import {
     SafeBrowsingEvaluator,
     syntacticCheckEvaluator,
 } from './core/evaluator/impl';
+import {log} from 'console';
 
 export const reputations: ReputationDataSource = new DbReputationDataSource();
 const validator = new ValidatorManager([
@@ -139,30 +140,62 @@ Browser.runtime.onInstalled.addListener(async ({reason}) => {
     chrome.storage.sync.set({lastUpdate: yesterday}, function () {
         console.log('updating phishtank');
     });
-    syncPhishTankDb();
+    //syncPhishTankDb();
+});
+
+// Browser.webRequest.onHeadersReceived.addListener(
+//     async details => {
+//         var secInfo = await Browser.webRequest.getSecurityInfo(details.requestId, {
+//             certificateChain: true,
+//             rawDER: false,
+//         });
+//         console.log('request security Info: ' + JSON.stringify(secInfo, null, 2));
+//     },
+//     {urls: ['<all_urls>'], },
+// );
+let isEnabled = true;
+let saf = true;
+let notSafeTab = 0;
+chrome.storage.sync.get({enabled: true}, function (data) {
+    if (!data.enabled) {
+        isEnabled = false;
+    }
 });
 
 Browser.webRequest.onBeforeRequest.addListener(
     async request => {
         logD('SW: onBeforeRequest()');
-
         const url = new URL(request.url);
         const safe = await checkUrl(url, true);
         if (!safe) {
-            alert('This website is dangerous!');
+            //alert('This website is dangerous!');
+            saf = false;
+            notSafeTab = request.tabId;
             chrome.storage.local.get({dangerousWebsiteCount: 0}, function (data) {
                 data.dangerousWebsiteCount++;
                 chrome.storage.local.set({dangerousWebsiteCount: data.dangerousWebsiteCount});
             });
+            chrome.tabs.update(request.tabId, {url: new URL('../test.html', import.meta.url).toString()});
         }
+
         return {cancel: !safe};
+        //return {redirectUrl: 'http://www.google.co.in/'};
     },
     {
         urls: ['<all_urls>'],
     },
     ['blocking'],
 );
-
+Browser.webRequest.onCompleted.addListener(
+    request => {
+        if (!saf) chrome.tabs.update(request.tabId, {url: new URL('../test.html', import.meta.url).toString()});
+        saf = true;
+        return;
+    },
+    {
+        urls: ['<all_urls>'],
+    },
+);
 // Browser.webNavigation.onBeforeNavigate.addListener(details => {
 //     const url = new URL(details.url);
 //     const rep = reputations.getReputation(url.origin);

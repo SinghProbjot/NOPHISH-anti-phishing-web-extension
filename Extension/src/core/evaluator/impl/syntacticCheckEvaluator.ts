@@ -2,6 +2,7 @@ import Browser from 'webextension-polyfill';
 import {Evaluator, EvaluatorInput} from '../Evaluator';
 //const punycode = require('punycode/');
 import {encode, toUnicode} from 'punycode';
+import {logD} from '../../misc';
 
 export class syntacticCheckEvaluator implements Evaluator {
     async evaluate({url}: EvaluatorInput): Promise<number> {
@@ -9,9 +10,11 @@ export class syntacticCheckEvaluator implements Evaluator {
         const encoded = toUnicode(url.toString());
         //se sono diversi non va bene
         //let visits = await this.getUrlVisitCount(url.toString());
+        if (encoded != url.toString()) console.log('punycode!');
         if (encoded != url.toString() || this.isIP(url.toString())) score = 0;
         else score = 100;
         //if (visits < 3) score = (score + 85) / 2;
+        logD(`SyntaxValidator: evaluate(): score ==> ` + score);
         return score;
     }
 
@@ -20,6 +23,7 @@ export class syntacticCheckEvaluator implements Evaluator {
         if (reg.exec(url) == null) {
             return false;
         } else {
+            console.log('IP ADDRESS!');
             return true;
         }
     }

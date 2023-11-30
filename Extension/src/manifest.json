@@ -10,7 +10,8 @@
         {
             "js": ["content.ts"],
             "matches": ["<all_urls>"],
-            "match_about_blank": false
+            "match_about_blank": false,
+            "run_at": "document_start"
         }
     ],
 

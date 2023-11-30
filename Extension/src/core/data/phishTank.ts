@@ -18,7 +18,7 @@ export const syncPhishTankDb = async () => {
         for (let index = 0; index < phishTankDb.length; index++) {
             let rep = {
                 url: phishTankDb.at(index)!.url.toString(),
-                score: 100,
+                score: 0,
                 userSafeMarked: false, //TODO finchè non viene aggiunta l'interfaccia grafica
             };
             reputations.addReputationAsync(rep);
