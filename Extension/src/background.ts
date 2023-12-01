@@ -36,7 +36,7 @@ const evaluator: Evaluator = new EvaluatorCompound([
 const isUrlSafe = (rep: Reputation) => rep.userSafeMarked || rep.score > 85;
 
 const checkUrl = async (url: URL, isPrimary: boolean) => {
-    const origin = url.origin;
+    const origin = url.toString();
 
     let rep = await reputations.getReputationAsync(origin);
     if (!rep) {
@@ -140,7 +140,7 @@ Browser.runtime.onInstalled.addListener(async ({reason}) => {
     chrome.storage.sync.set({lastUpdate: yesterday}, function () {
         console.log('updating phishtank');
     });
-    //syncPhishTankDb();
+    syncPhishTankDb();
 });
 
 // Browser.webRequest.onHeadersReceived.addListener(
@@ -219,6 +219,7 @@ Browser.runtime.onMessage.addListener(async (message: Message, sender, sendRespo
                     if (!isSafe) {
                         // notifica utente
                         alert('This website is dangerous!');
+                        return {redirect: new URL('./warn.html', import.meta.url).toString()};
                         // Browser.notifications.create(undefined, {
                         //     type: 'basic',
                         //     iconUrl: new URL('./assets/iconr.png', import.meta.url).toString(), //Browser.runtime.getURL('iconr.png'),

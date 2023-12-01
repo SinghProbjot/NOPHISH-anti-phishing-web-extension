@@ -28,4 +28,8 @@ export class DbReputationDataSource implements ReputationDataSource {
     async getReputationAsync(url: string): Promise<Reputation | null> {
         return (await this.db.reputations.where('url').equals(url).first()) ?? null;
     }
+
+    async addBulk(rep: Reputation[]): Promise<void> {
+        await this.db.reputations.bulkAdd(rep);
+    }
 }

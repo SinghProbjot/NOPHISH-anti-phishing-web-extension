@@ -8,6 +8,9 @@ export class LocalReputationDataSource implements ReputationDataSource {
     constructor() {
         this.reputations = [];
     }
+    addBulk(rep: Reputation[]): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
 
     getReputation(url: string): Reputation | null {
         return this.reputations.find(rep => rep.url === url) ?? null;
