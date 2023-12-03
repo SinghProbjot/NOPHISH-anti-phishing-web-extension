@@ -71,3 +71,9 @@
 - Aggiunta una prima interfaccia grafica, da migiliorare successivamente, Soprattutto la notifica quando si incontra un url pericoloso, che per ora è un semplice alert.
 
 - Utilizzo intelligente di phishtank: fetch solo una volta al giorno, ora ha accesso alla blacklist, e il tutto viene caricato nel database. Aggiornamento dello stato tramite syncStorage.
+
+- IPQuality funzionante, per evitare il consumo di richieste verrà usato solo per le richieste principali, non per il controllo dei link di tutta la pagina.
+
+- analisi dell' header
+
+- Osservazione header richiesta di evilginx

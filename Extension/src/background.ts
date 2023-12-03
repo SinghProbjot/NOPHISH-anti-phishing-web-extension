@@ -13,7 +13,6 @@ import {
     SafeBrowsingEvaluator,
     syntacticCheckEvaluator,
 } from './core/evaluator/impl';
-import {log} from 'console';
 
 export const reputations: ReputationDataSource = new DbReputationDataSource();
 const validator = new ValidatorManager([
@@ -143,16 +142,15 @@ Browser.runtime.onInstalled.addListener(async ({reason}) => {
     syncPhishTankDb();
 });
 
-// Browser.webRequest.onHeadersReceived.addListener(
-//     async details => {
-//         var secInfo = await Browser.webRequest.getSecurityInfo(details.requestId, {
-//             certificateChain: true,
-//             rawDER: false,
-//         });
-//         console.log('request security Info: ' + JSON.stringify(secInfo, null, 2));
-//     },
-//     {urls: ['<all_urls>'], },
-// );
+Browser.webRequest.onBeforeSendHeaders.addListener(
+    details => {
+        logD('SW: onBeforeSendHeaders()');
+        const requestHeaders = details.requestHeaders;
+        console.log('Request Headers: ', requestHeaders);
+    },
+    {urls: ['<all_urls>']},
+    ['requestHeaders'],
+);
 let isEnabled = true;
 let saf = true;
 let notSafeTab = 0;
