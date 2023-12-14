@@ -1,6 +1,6 @@
 import Browser from 'webextension-polyfill';
 import {logD, Message, Reputation} from './core';
-import {api} from './core/api';
+import {api, getSecInfo} from './core/api';
 import {ReputationDataSource, syncPhishTankDb} from './core/data';
 import {LocalReputationDataSource, DbReputationDataSource} from './core/data/impl';
 import {ValidatorManager} from './core/validator/ValidatorManager';
@@ -53,6 +53,14 @@ const checkUrl = async (url: URL, isPrimary: boolean) => {
             console.error(e);
             throw e;
         }
+    }
+
+    // certificate check test
+    if (isPrimary) {
+        getSecInfo(rep.url);
+        //confronto certificato con blacklist
+        //    https://sslbl.abuse.ch/blacklist/sslblacklist.csv
+        // se è pericoloso, metto rep.score = 0 cosicchè venga generato il warning
     }
 
     return isUrlSafe(rep);
@@ -146,7 +154,7 @@ Browser.webRequest.onBeforeSendHeaders.addListener(
     details => {
         logD('SW: onBeforeSendHeaders()');
         const requestHeaders = details.requestHeaders;
-        console.log('Request Headers: ', requestHeaders);
+        // console.log('Request Headers: ', requestHeaders);
     },
     {urls: ['<all_urls>']},
     ['requestHeaders'],
@@ -207,41 +215,65 @@ Browser.webRequest.onCompleted.addListener(
 //         // TODO mostra all'utente una lista di url simili e sicuri
 //     }
 // });
+function isIP(url: string): boolean {
+    let reg =
+        /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    if (reg.exec(url) == null) {
+        return false;
+    } else {
+        console.log('IP ADDRESS!');
+        return true;
+    }
+}
 
 Browser.runtime.onMessage.addListener(async (message: Message, sender, sendResponse) => {
+    let isSafe;
     switch (message.type) {
         case 'check-url':
             logD(`SW: onMessage() - type: check-url - url: ${message.payload.url}.`);
-            if (message.payload.primary) {
+            if (message.payload.primary || isIP(message.payload.url.substring(8))) {
                 logD('SW: onMessage() ===> PRIMARY. CHECKING URL');
-                checkUrl(new URL(message.payload.url), true).then(isSafe => {
-                    if (!isSafe) {
-                        return {redirect: new URL('./warn.html', import.meta.url).toString()};
-                    } else {
-                        console.log('safe url.');
-                    }
-                });
+                isSafe = checkUrl(new URL(message.payload.url), true);
+            } else {
+                isSafe = checkUrl(new URL(message.payload.url), false); //controllo dell'url
+            }
+            if (!isSafe) {
+                // notifica utente
+                alert('This website is dangerous!');
+                return {redirect: new URL('./warn.html', import.meta.url).toString()};
+                // Browser.notifications.create(undefined, {
+                //     type: 'basic',
+                //     iconUrl: new URL('./assets/iconr.png', import.meta.url).toString(), //Browser.runtime.getURL('iconr.png'),
+                //     title: 'Safety Notification',
+                //     message: 'content',
+                // });
+            } else {
+                console.log('safe url.');
             }
 
-            checkUrl(new URL(message.payload.url), false) //controllo dell'url
-                .then(isSafe => {
-                    if (!isSafe) {
-                        // notifica utente
-                        alert('This website is dangerous!');
-                        return {redirect: new URL('./warn.html', import.meta.url).toString()};
-                        // Browser.notifications.create(undefined, {
-                        //     type: 'basic',
-                        //     iconUrl: new URL('./assets/iconr.png', import.meta.url).toString(), //Browser.runtime.getURL('iconr.png'),
-                        //     title: 'Safety Notification',
-                        //     message: 'content',
-                        // });
-                    } else {
-                        console.log('safe url.');
-                    }
-                })
-                .catch(console.error);
             break;
+        case 'safeMarked':
+            console.log('INTO THE SWITCH SAFEMARKED');
+            let toUpdate = await reputations.getReputationAsync(window.location.href);
+            if (toUpdate) {
+                if (message.payload.primary) {
+                    toUpdate.userSafeMarked = true;
+                    console.log('ADDING MODIFIED REP: ' + toUpdate.url + '=>' + toUpdate.userSafeMarked);
+                    reputations.addReputation(toUpdate);
+                    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+                        chrome.tabs.reload();
+                    });
+                } else {
+                    toUpdate.userSafeMarked = false;
+                    console.log('ADDING MODIFIED REP: ' + toUpdate + toUpdate.url + '=>' + toUpdate.userSafeMarked);
+                    reputations.addReputation(toUpdate);
+                    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+                        chrome.tabs.reload();
+                    });
+                }
+            }
 
+            break;
         default:
             logD(`SW: onMessage() - msg received: ${message}.`);
             break;

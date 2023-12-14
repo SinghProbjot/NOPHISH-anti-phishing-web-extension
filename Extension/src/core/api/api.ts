@@ -7,6 +7,30 @@ export const api = axios.create({
     adapter: fetchAdapter,
 });
 
+export async function getSecInfo(url: string) {
+    const options = {
+        method: 'GET',
+        url: 'https://check-ssl.p.rapidapi.com/sslcheck',
+        params: {
+            domain: 'amazon.com',
+        },
+        headers: {
+            'X-RapidAPI-Key': 'd356331eb0msh27f859c40c09f54p12f92djsne66cd4ec6f89',
+            'X-RapidAPI-Host': 'check-ssl.p.rapidapi.com',
+        },
+    };
+
+    try {
+        const response = await axios.request(options);
+        console.log(response.data);
+    } catch (e) {
+        if (e instanceof URIError) throw e;
+
+        console.error(e);
+        throw e;
+    }
+}
+
 export async function getScore(url: string, apiKey: string) {
     try {
         const {data} = await api.get(`https://www.ipqualityscore.com/api/json/url/${apiKey}/${encodeURI(url)}`);

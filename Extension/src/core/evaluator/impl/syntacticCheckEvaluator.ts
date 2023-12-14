@@ -3,10 +3,6 @@ import {Evaluator, EvaluatorInput} from '../Evaluator';
 //const punycode = require('punycode/');
 import {encode, toUnicode} from 'punycode';
 import {logD} from '../../misc';
-import {isIPAddress} from 'ip-address-validator';
-import {EvaluatorCompound} from '../EvaluatorCompound';
-import {IPQualityEvaluator} from './IPQualityEvaluator';
-import {api} from '../../api';
 export class syntacticCheckEvaluator implements Evaluator {
     async evaluate({url}: EvaluatorInput): Promise<number> {
         let score = 0;
@@ -15,15 +11,11 @@ export class syntacticCheckEvaluator implements Evaluator {
         //let visits = await this.getUrlVisitCount(url.toString());
 
         console.log('url restricted: ' + url.origin.toString().substring(8));
-        const a = new IPQualityEvaluator('VWs8ZZcEReDT4BbDPMgw5xejsbfdlTk8', api);
         //let response = await a.getData({url, isPrimary: true});
 
         if (encoded != url.toString()) {
             console.log('punycode!');
             score = 0;
-        } else if (this.isIP(url.origin.toString().substring(8))) {
-            score = await a.evaluate({url, isPrimary: true});
-            //score = 100 - response.risk_score;
         } else score = 100;
 
         //if (visits < 3) score = (score + 85) / 2;

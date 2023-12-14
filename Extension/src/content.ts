@@ -9,15 +9,16 @@ chrome.storage.sync.get({enabled: true}, function (data) {
 });
 
 function run() {
+    
     window.addEventListener('load', () => {
         logD('Window loaded: ' + window.location.hostname);
         if (
             window.location.hostname.startsWith('localhost') ||
             window.location.hostname.startsWith('chrome://') ||
-            window.location.hostname.startsWith('https://chrome://')
-        ) {
+            window.location.hostname.startsWith('https://chrome://') ||
+            window.location.hostname.startsWith('chrome-extension://')
+        )
             return;
-        }
         const message: Message = {
             type: 'check-url',
             payload: {

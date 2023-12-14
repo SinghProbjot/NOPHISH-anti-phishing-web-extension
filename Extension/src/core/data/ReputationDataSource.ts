@@ -10,5 +10,6 @@ export interface ReputationDataSource {
     addReputationAsync(rep: Reputation): Promise<void>;
 
     getReputationAsync(url: string): Promise<Reputation | null>;
+
     addBulk(rep: Reputation[]): Promise<void>;
 }

@@ -77,3 +77,11 @@
 - analisi dell' header
 
 - Osservazione header richiesta di evilginx
+
+- Evilginx: l'unico modo che sembra essere utilizzabile, è quello di analizzare i dati del certificato, cosa che in chrome non è permessa, solo in firefox le esntensioni tramitre la webrequest api possono ottenere le informazioni di sicurezza del certificato ssl.
+
+- valutazione di indirizzi ip: non vengono più valutati come insicuri senza condizioni, ma vengono controllati anche essi tramite IPQuality, che fornisce uno studio dettagliato. il compito di IPQuality, date le limitazioni, è quello di studiare il link principale, ed eventuali indirizzi ip.
+
+- phishing di frontiera: dato che safebrowsing non è risultato efficace, nel detecting di tutti i tipi di phishing, IPQuality dall'altra parte è un servizio molto efficiente e completo, sono già fornite le informazioni riguardo anche siti fraudolenti crypto, sono stati effettuati alcuni test.
+
+- Evilginx: implementata una possibile soluzione per studiare il certificato. Data l'impossibilità di farlo attraverso strumenti del browser, si è deciso di utilizzare un servizio di terze parti, ovvie anche qui le limitazioni, ma comunque per testing è stato implementato un pezzo che ne fa uso e dimostra il funzionamento. I risultati ottenuti saranno da confrontare con fonti di attendibiltà e blacklist, che è stata individuata ad esempio qui: https://sslbl.abuse.ch/blacklist/sslblacklist.csv

@@ -13,11 +13,19 @@ interface CheckUrlMessage extends BaseMessage {
     };
 }
 
+interface CheckMarkMessage extends BaseMessage {
+    type: 'safeMarked';
+    payload: {
+        url: string;
+        primary: boolean;
+    };
+}
+
 interface CheckPageMessage extends BaseMessage {
     type: 'check-page';
 }
 
-export type Message = CheckUrlMessage | CheckPageMessage;
+export type Message = CheckUrlMessage | CheckPageMessage | CheckMarkMessage;
 
 /**
  * Informazioni reputazionali di un url
