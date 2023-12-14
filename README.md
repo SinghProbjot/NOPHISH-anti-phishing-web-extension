@@ -86,4 +86,5 @@
 
 - Evilginx: implementata una possibile soluzione per studiare il certificato. Data l'impossibilità di farlo attraverso strumenti del browser, si è deciso di utilizzare un servizio di terze parti, ovvie anche qui le limitazioni, ma comunque per testing è stato implementato un pezzo che ne fa uso e dimostra il funzionamento. I risultati ottenuti saranno da confrontare con fonti di attendibiltà e blacklist, che è stata individuata ad esempio qui: https://sslbl.abuse.ch/blacklist/sslblacklist.csv
 
+
 ![8EDCC147-B95F-4EA8-940A-0EAAE519026A](https://github.com/SinghProbjot/Stage/assets/102951324/e6ad8970-9274-4ea4-b3f4-04e605177633)
