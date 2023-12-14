@@ -13,8 +13,9 @@ export class SafeBrowsingEvaluator implements Evaluator {
         this.apiInstance = apiInstance;
     }
 
-    async evaluate({url}: EvaluatorInput): Promise<number> {
+    async evaluate({url, isPrimary}: EvaluatorInput): Promise<number> {
         // TODO HANDLE ERRORS
+        if (isPrimary) return -1;
         try {
             const dangerousUrls = await this.checkUrls([url.toString()]);
 

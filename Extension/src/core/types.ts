@@ -9,6 +9,7 @@ interface CheckUrlMessage extends BaseMessage {
     type: 'check-url';
     payload: {
         url: string;
+        primary: boolean;
     };
 }
 

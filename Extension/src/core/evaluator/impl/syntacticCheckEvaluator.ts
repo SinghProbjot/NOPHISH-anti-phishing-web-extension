@@ -4,16 +4,28 @@ import {Evaluator, EvaluatorInput} from '../Evaluator';
 import {encode, toUnicode} from 'punycode';
 import {logD} from '../../misc';
 import {isIPAddress} from 'ip-address-validator';
+import {EvaluatorCompound} from '../EvaluatorCompound';
+import {IPQualityEvaluator} from './IPQualityEvaluator';
+import {api} from '../../api';
 export class syntacticCheckEvaluator implements Evaluator {
     async evaluate({url}: EvaluatorInput): Promise<number> {
         let score = 0;
         const encoded = toUnicode(url.toString());
         //se sono diversi non va bene
         //let visits = await this.getUrlVisitCount(url.toString());
-        if (encoded != url.toString()) console.log('punycode!');
+
         console.log('url restricted: ' + url.origin.toString().substring(8));
-        if (encoded != url.toString() || this.isIP(url.origin.toString().substring(8))) score = 0;
-        else score = 100;
+        const a = new IPQualityEvaluator('VWs8ZZcEReDT4BbDPMgw5xejsbfdlTk8', api);
+        //let response = await a.getData({url, isPrimary: true});
+
+        if (encoded != url.toString()) {
+            console.log('punycode!');
+            score = 0;
+        } else if (this.isIP(url.origin.toString().substring(8))) {
+            score = await a.evaluate({url, isPrimary: true});
+            //score = 100 - response.risk_score;
+        } else score = 100;
+
         //if (visits < 3) score = (score + 85) / 2;
         logD(`SyntaxValidator: evaluate(): score ==> ` + score);
         return score;

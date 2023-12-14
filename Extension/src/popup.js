@@ -2,14 +2,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var toggleBtn = document.getElementById('toggleBtn');
 
     // Check the initial state of the extension
-    chrome.storage.sync.get({enabled: true}, function(data) {
+    chrome.storage.sync.get({enabled: true}, function (data) {
         updateButton(data.enabled);
     });
 
     toggleBtn.addEventListener('click', function () {
-        chrome.storage.sync.get({enabled: true}, function(data) {
+        chrome.storage.sync.get({enabled: true}, function (data) {
             var newStatus = !data.enabled; // Reverse the status
-            chrome.storage.sync.set({enabled: newStatus}, function() {
+            chrome.storage.sync.set({enabled: newStatus}, function () {
                 updateButton(newStatus);
             });
         });
@@ -20,10 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleBtn.className = enabled ? 'enabled' : 'disabled';
     }
 
-
     // Show the website counts
-    chrome.storage.local.get({totalWebsiteCount: 0, dangerousWebsiteCount: 0}, function(data) {
+    chrome.storage.local.get({totalWebsiteCount: 0, dangerousWebsiteCount: 0}, function (data) {
         document.getElementById('totalWebsiteCount').textContent = `Total websites visited: ${data.totalWebsiteCount}`;
-        document.getElementById('dangerousWebsiteCount').textContent = `Dangerous websites encountered: ${data.dangerousWebsiteCount}`;
+        document.getElementById(
+            'dangerousWebsiteCount',
+        ).textContent = `Dangerous requests blocked: ${data.dangerousWebsiteCount}`;
     });
 });

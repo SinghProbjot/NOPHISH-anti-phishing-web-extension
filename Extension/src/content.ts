@@ -18,12 +18,24 @@ function run() {
         ) {
             return;
         }
-        const received: string[] = checkPage();
+        const message: Message = {
+            type: 'check-url',
+            payload: {
+                url: window.location.origin,
+                primary: true,
+            },
+        };
+
+        logD('Window loaded: Sending main site name ==>' + window.location.origin);
+        Browser.runtime.sendMessage(message);
+
+        const received: string[] = checkPage(); //check all hrefs
         received.forEach(element => {
             const message: Message = {
                 type: 'check-url',
                 payload: {
                     url: element,
+                    primary: false,
                 },
             };
             Browser.runtime.sendMessage(message);

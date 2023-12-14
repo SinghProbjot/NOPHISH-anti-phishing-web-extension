@@ -25,7 +25,17 @@ export class IPQualityEvaluator implements Evaluator {
 
         return 100 - riskScore;
     }
-
+    async getData({url}: EvaluatorInput) {
+        try {
+            const {data} = await this.apiInstance.get<IPQuality.ResponseBody>(
+                `${this.BASE_URL}/json/url/${this.API_KEY}/${encodeURI(url.hostname)}`,
+            );
+            return data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    }
     protected async checkUrl(url: URL) {
         try {
             const {data} = await this.apiInstance.get<IPQuality.ResponseBody>(

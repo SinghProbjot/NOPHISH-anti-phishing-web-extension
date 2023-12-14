@@ -23,7 +23,7 @@ const validator = new ValidatorManager([
 const evaluator: Evaluator = new EvaluatorCompound([
     //new PhishTankEvaluator(),
     new SafeBrowsingEvaluator('AIzaSyCGFq-OQDTuTN__iaigu0b7R-HyoGTeIsE', api),
-    //new IPQualityEvaluator('VWs8ZZcEReDT4BbDPMgw5xejsbfdlTk8', api),
+    new IPQualityEvaluator('VWs8ZZcEReDT4BbDPMgw5xejsbfdlTk8', api),
     new syntacticCheckEvaluator(),
 ]);
 
@@ -164,7 +164,7 @@ Browser.webRequest.onBeforeRequest.addListener(
     async request => {
         logD('SW: onBeforeRequest()');
         const url = new URL(request.url);
-        const safe = await checkUrl(url, true);
+        const safe = await checkUrl(url, false);
         if (!safe) {
             //alert('This website is dangerous!');
             saf = false;
@@ -177,7 +177,7 @@ Browser.webRequest.onBeforeRequest.addListener(
         }
 
         return {cancel: !safe};
-        //return {redirectUrl: 'http://www.google.co.in/'};
+        //return {redirectUrl: 'http://www.google.com/'};
     },
     {
         urls: ['<all_urls>'],
@@ -212,6 +212,17 @@ Browser.runtime.onMessage.addListener(async (message: Message, sender, sendRespo
     switch (message.type) {
         case 'check-url':
             logD(`SW: onMessage() - type: check-url - url: ${message.payload.url}.`);
+            if (message.payload.primary) {
+                logD('SW: onMessage() ===> PRIMARY. CHECKING URL');
+                checkUrl(new URL(message.payload.url), true).then(isSafe => {
+                    if (!isSafe) {
+                        return {redirect: new URL('./warn.html', import.meta.url).toString()};
+                    } else {
+                        console.log('safe url.');
+                    }
+                });
+            }
+
             checkUrl(new URL(message.payload.url), false) //controllo dell'url
                 .then(isSafe => {
                     if (!isSafe) {
