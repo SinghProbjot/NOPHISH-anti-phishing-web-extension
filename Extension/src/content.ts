@@ -1,6 +1,8 @@
 import {logD, logE, Message} from './core';
 import Browser from 'webextension-polyfill';
 
+export var lastRequest: URL;
+
 logD('Extension content script loaded.');
 chrome.storage.sync.get({enabled: true}, function (data) {
     if (data.enabled) {
@@ -9,7 +11,11 @@ chrome.storage.sync.get({enabled: true}, function (data) {
 });
 
 function run() {
-    
+    window.addEventListener('beforeunload', () => {
+        lastRequest = new URL(window.location.href);
+        logD('window: beforeunload() -> url: ' + lastRequest.href);
+    });
+
     window.addEventListener('load', () => {
         logD('Window loaded: ' + window.location.hostname);
         if (

@@ -17,6 +17,7 @@ interface CheckMarkMessage extends BaseMessage {
     type: 'safeMarked';
     payload: {
         url: string;
+        tabId: number;
         primary: boolean;
     };
 }

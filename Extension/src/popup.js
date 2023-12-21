@@ -1,3 +1,6 @@
+let currenturl, tab;
+import {reputations} from './background.ts';
+import {lastRequest} from './content.ts';
 document.addEventListener('DOMContentLoaded', function () {
     var toggleBtn = document.getElementById('toggleBtn');
     var checkbox = document.getElementById('checkbox');
@@ -15,22 +18,38 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    async function callback(tabs) {
+        let currentTab = tabs[0]; // there will be only one in this array
+        console.log(currentTab); // also has properties like currentTab.id
+        if (!currentTab.url.startsWith('chrome-extension://')) {
+            currenturl = currentTab.url;
+            tab = currentTab.id;
+            // TODO tutto ciò che dipende da questo link
+            // ...
+            let rep = await reputations.getReputationAsync(currenturl);
+            if (rep.userSafeMarked) checkbox.checked = true;
+        } else {
+            currenturl = lastRequest;
+            tab = currentTab.id;
+        }
+    }
+    let query = {active: true, currentWindow: true};
+
+    chrome.tabs.query(query, callback);
     checkbox.addEventListener('change', function () {
-        var currentUrl;
-        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-            currentUrl = tabs.active.url;
-        });
         const message = {
             type: 'safeMarked',
             payload: {
-                url: currentUrl,
+                url: currenturl,
+                tabId: tab,
                 primary: true, //uso primary per sapere se è stato checkato o no
             },
         };
         const message2 = {
             type: 'safeMarked',
             payload: {
-                url: currentUrl,
+                url: currenturl,
+                tabId: tab,
                 primary: false,
             },
         };

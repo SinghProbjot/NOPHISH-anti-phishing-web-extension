@@ -14,6 +14,7 @@ import {
     syntacticCheckEvaluator,
 } from './core/evaluator/impl';
 
+
 export const reputations: ReputationDataSource = new DbReputationDataSource();
 const validator = new ValidatorManager([
     new PhishTankValidator(),
@@ -57,7 +58,7 @@ const checkUrl = async (url: URL, isPrimary: boolean) => {
 
     // certificate check test
     if (isPrimary) {
-        getSecInfo(rep.url);
+        // getSecInfo(rep.url);
         //confronto certificato con blacklist
         //    https://sslbl.abuse.ch/blacklist/sslblacklist.csv
         // se è pericoloso, metto rep.score = 0 cosicchè venga generato il warning
@@ -168,6 +169,8 @@ chrome.storage.sync.get({enabled: true}, function (data) {
     }
 });
 
+
+
 Browser.webRequest.onBeforeRequest.addListener(
     async request => {
         logD('SW: onBeforeRequest()');
@@ -254,24 +257,46 @@ Browser.runtime.onMessage.addListener(async (message: Message, sender, sendRespo
             break;
         case 'safeMarked':
             console.log('INTO THE SWITCH SAFEMARKED');
-            let toUpdate = await reputations.getReputationAsync(window.location.href);
+
+            // var currentUrl, tab;
+            // chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+            //     // currentUrl = tabs.active.url;
+            //     var current = tabs[0];
+            //     currentUrl = current.url;
+            //     tab = current.id;
+            // });
+
+            // message.payload.url != currentUrl;
+            // message.payload.tabId != tab;
+
+            console.log('CURRENT TAB URL:  ------------_-------------->>>' + message.payload.url);
+
+            let toUpdate = await reputations.getReputationAsync(message.payload.url);
             if (toUpdate) {
                 if (message.payload.primary) {
                     toUpdate.userSafeMarked = true;
-                    console.log('ADDING MODIFIED REP: ' + toUpdate.url + '=>' + toUpdate.userSafeMarked);
+                    console.log(
+                        'ADDING MODIFIED REP: ' + toUpdate.url + '=> now safeMarked:  ' + toUpdate.userSafeMarked,
+                    );
                     reputations.addReputation(toUpdate);
                     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-                        chrome.tabs.reload();
+                        chrome.tabs.reload(message.payload.tabId);
                     });
                 } else {
                     toUpdate.userSafeMarked = false;
-                    console.log('ADDING MODIFIED REP: ' + toUpdate + toUpdate.url + '=>' + toUpdate.userSafeMarked);
+                    console.log(
+                        'ADDING MODIFIED REP: ' +
+                            toUpdate +
+                            toUpdate.url +
+                            '=> now safeMarked:  ' +
+                            toUpdate.userSafeMarked,
+                    );
                     reputations.addReputation(toUpdate);
                     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-                        chrome.tabs.reload();
+                        chrome.tabs.reload(message.payload.tabId);
                     });
                 }
-            }
+            } else logD('url not found in db.');
 
             break;
         default:
