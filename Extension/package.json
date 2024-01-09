@@ -11,6 +11,10 @@
     },
     "author": "",
     "license": "ISC",
+    "workspaces": [
+        "packages/*"
+    ],
+    "type": "module",
     "devDependencies": {
         "@parcel/config-webextension": "^2.10.0",
         "@tsconfig/recommended": "^1.0.3",
@@ -20,12 +24,15 @@
         "@types/webextension-polyfill": "^0.10.6",
         "buffer": "^5.5.0||^6.0.0",
         "events": "^3.1.0",
+        "https-browserify": "^1.0.0",
         "parcel": "^2.10.0",
         "prettier": "3.0.3",
         "process": "^0.11.10",
         "punycode": "^1.4.1",
         "stream-browserify": "^3.0.0",
+        "stream-http": "^3.2.0",
         "typescript": "^5.2.2",
+        "url": "^0.11.3",
         "vm-browserify": "^1.1.2"
     },
     "dependencies": {
@@ -38,6 +45,7 @@
         "dexie": "^3.2.4",
         "fs": "^0.0.1-security",
         "ip-address-validator": "^1.0.10",
+        "ssl-checker": "^2.0.8",
         "webextension-polyfill": "^0.10.0"
     }
 }

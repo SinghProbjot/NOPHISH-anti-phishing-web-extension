@@ -1,5 +1,5 @@
 let currenturl, tab;
-import {reputations} from './background.ts';
+import {reputations, lastDangerousTabID} from './background.ts';
 import {lastRequest} from './content.ts';
 document.addEventListener('DOMContentLoaded', function () {
     var toggleBtn = document.getElementById('toggleBtn');

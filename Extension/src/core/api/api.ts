@@ -23,6 +23,7 @@ export async function getSecInfo(url: string) {
     try {
         const response = await axios.request(options);
         console.log(response.data);
+        return response.data.issuer;
     } catch (e) {
         if (e instanceof URIError) throw e;
 

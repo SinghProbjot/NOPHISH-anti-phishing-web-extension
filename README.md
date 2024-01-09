@@ -93,3 +93,9 @@
 - SSL Labs API per dettagli su un url: https://github.com/ssllabs/ssllabs-scan/blob/master/ssllabs-api-docs-v3.md
 
 - Valutazione sull'aggiunta della parte di intelligenza artificiale, ricerca su scikit learn, phishing websites dataset: https://archive.ics.uci.edu/dataset/327/phishing+websites https://www.activestate.com/blog/phishing-url-detection-with-python-and-ml/ https://github.com/transitive-bullshit/scikit-learn-ts
+
+- scikit non si può integrare
+
+- implementazione di un server in locale con node, che accede al cerificato di un url.
+
+- ![Alt text](image.png)

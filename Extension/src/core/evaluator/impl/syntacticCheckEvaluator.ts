@@ -1,10 +1,13 @@
 import Browser from 'webextension-polyfill';
+import * as sklearn from 'sklearn';
 import {Evaluator, EvaluatorInput} from '../Evaluator';
 //const punycode = require('punycode/');
 import {encode, toUnicode} from 'punycode';
 import {logD} from '../../misc';
+
 export class syntacticCheckEvaluator implements Evaluator {
     async evaluate({url}: EvaluatorInput): Promise<number> {
+        //const py = await sklearn.createPythonBridge();
         let score = 0;
         const encoded = toUnicode(url.toString());
         //se sono diversi non va bene
@@ -22,6 +25,7 @@ export class syntacticCheckEvaluator implements Evaluator {
         logD(`SyntaxValidator: evaluate(): score ==> ` + score);
         return score;
     }
+
     protected isIP(url: string): boolean {
         let reg =
             /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
@@ -32,6 +36,7 @@ export class syntacticCheckEvaluator implements Evaluator {
             return true;
         }
     }
+
     //quanto un url è visitato
     protected async getUrlVisitCount(Url: string) {
         let visitCount = 0;

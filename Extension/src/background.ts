@@ -1,4 +1,5 @@
 import Browser from 'webextension-polyfill';
+import sslChecker from 'ssl-checker';
 import {logD, Message, Reputation} from './core';
 import {api, getSecInfo} from './core/api';
 import {ReputationDataSource, syncPhishTankDb} from './core/data';
@@ -14,6 +15,8 @@ import {
     syntacticCheckEvaluator,
 } from './core/evaluator/impl';
 
+export var lastDangerousTabID = 0;
+export var lastDangerousTabUrl = '';
 
 export const reputations: ReputationDataSource = new DbReputationDataSource();
 const validator = new ValidatorManager([
@@ -58,9 +61,13 @@ const checkUrl = async (url: URL, isPrimary: boolean) => {
 
     // certificate check test
     if (isPrimary) {
-        // getSecInfo(rep.url);
+        console.log('SSL CHECKER TEST:    ');
+        // const getSslDetails = await sslChecker(url.hostname);
+        // console.log(getSslDetails);
+        const info = getSecInfo(rep.url);
         //confronto certificato con blacklist
         //    https://sslbl.abuse.ch/blacklist/sslblacklist.csv
+        //let found = ssList.find((element) => element == info)
         // se è pericoloso, metto rep.score = 0 cosicchè venga generato il warning
     }
 
@@ -115,6 +122,8 @@ const reduceHost = (host: string): string => {
     return host;
 };
 
+export let ssList: string[] = [];
+
 Browser.runtime.onInstalled.addListener(async ({reason}) => {
     logD(`SW: onInstalled() - reason: ${reason}`);
     // const manifest = Browser.runtime.getManifest();
@@ -131,9 +140,14 @@ Browser.runtime.onInstalled.addListener(async ({reason}) => {
     // }
 
     const csvUrl = new URL('./assets/top500Domains.csv', import.meta.url).toString();
+    const csvUrl2 = new URL('./assets/sslblacklist.csv', import.meta.url).toString();
 
     const csvString = await (await fetch(csvUrl)).text();
+    const csvString2 = await (await fetch(csvUrl2)).text();
+
     const records = parse(csvString, {columns: true});
+    const records2 = parse(csvString2, {columns: true});
+
     for (const {domain: url, score} of records) {
         reputations.addReputationAsync({
             url,
@@ -141,6 +155,11 @@ Browser.runtime.onInstalled.addListener(async ({reason}) => {
             userSafeMarked: false,
         });
     }
+
+    for (const {SHA1, Listingreason} of records2) {
+        ssList.push(Listingreason);
+    }
+
     chrome.storage.sync.set({enabled: true}, function () {
         console.log('The extension is enabled.');
     });
@@ -169,8 +188,6 @@ chrome.storage.sync.get({enabled: true}, function (data) {
     }
 });
 
-
-
 Browser.webRequest.onBeforeRequest.addListener(
     async request => {
         logD('SW: onBeforeRequest()');
@@ -179,7 +196,9 @@ Browser.webRequest.onBeforeRequest.addListener(
         if (!safe) {
             //alert('This website is dangerous!');
             saf = false;
-            notSafeTab = request.tabId;
+            //notSafeTab = request.tabId;
+            lastDangerousTabID = request.tabId;
+            lastDangerousTabUrl = request.url;
             chrome.storage.local.get({dangerousWebsiteCount: 0}, function (data) {
                 data.dangerousWebsiteCount++;
                 chrome.storage.local.set({dangerousWebsiteCount: data.dangerousWebsiteCount});
@@ -197,7 +216,10 @@ Browser.webRequest.onBeforeRequest.addListener(
 );
 Browser.webRequest.onCompleted.addListener(
     request => {
-        if (!saf) chrome.tabs.update(request.tabId, {url: new URL('./warn.html', import.meta.url).toString()});
+        if (!saf) {
+            lastDangerousTabID = request.tabId;
+            chrome.tabs.update(request.tabId, {url: new URL('./warn.html', import.meta.url).toString()});
+        }
         saf = true;
         return;
     },
@@ -270,8 +292,12 @@ Browser.runtime.onMessage.addListener(async (message: Message, sender, sendRespo
             // message.payload.tabId != tab;
 
             console.log('CURRENT TAB URL:  ------------_-------------->>>' + message.payload.url);
+            let toUpdate;
+            if (message.payload.url.startsWith('chrome-extension')) {
+                toUpdate = await reputations.getReputationAsync(lastDangerousTabUrl);
+                message.payload.tabId = lastDangerousTabID;
+            } else toUpdate = await reputations.getReputationAsync(message.payload.url);
 
-            let toUpdate = await reputations.getReputationAsync(message.payload.url);
             if (toUpdate) {
                 if (message.payload.primary) {
                     toUpdate.userSafeMarked = true;
