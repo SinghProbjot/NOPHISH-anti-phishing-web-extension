@@ -61,13 +61,15 @@ const checkUrl = async (url: URL, isPrimary: boolean) => {
 
     // certificate check test
     if (isPrimary) {
-        console.log('SSL CHECKER TEST:    ');
-        // const getSslDetails = await sslChecker(url.hostname);
-        // console.log(getSslDetails);
-        const info = getSecInfo(rep.url);
+        console.log('SSL CHECKER TEST: ');
+        //const info = getSecInfo(rep.url);
+
+        const {data} = await api.get('http://localhost:8000/getCertificate?url=' + origin);
+        //console.log(data.issuer.O);
         //confronto certificato con blacklist
         //    https://sslbl.abuse.ch/blacklist/sslblacklist.csv
-        //let found = ssList.find((element) => element == info)
+        let found = ssList.find(element => element === data.issuer.O);
+        console.log('finding ' + data.issuer.O + 'in the blacklist: ' + (found ? 'found' : 'not found'));
         // se è pericoloso, metto rep.score = 0 cosicchè venga generato il warning
     }
 
@@ -123,7 +125,6 @@ const reduceHost = (host: string): string => {
 };
 
 export let ssList: string[] = [];
-
 Browser.runtime.onInstalled.addListener(async ({reason}) => {
     logD(`SW: onInstalled() - reason: ${reason}`);
     // const manifest = Browser.runtime.getManifest();
@@ -141,12 +142,12 @@ Browser.runtime.onInstalled.addListener(async ({reason}) => {
 
     const csvUrl = new URL('./assets/top500Domains.csv', import.meta.url).toString();
     const csvUrl2 = new URL('./assets/sslblacklist.csv', import.meta.url).toString();
-
+    const headers = ['Listingdate', 'SHA1', 'Listingreason'];
     const csvString = await (await fetch(csvUrl)).text();
     const csvString2 = await (await fetch(csvUrl2)).text();
 
     const records = parse(csvString, {columns: true});
-    const records2 = parse(csvString2, {columns: true});
+    const records2 = parse(csvString2, {columns: headers, from_line: 2});
 
     for (const {domain: url, score} of records) {
         reputations.addReputationAsync({
@@ -156,9 +157,10 @@ Browser.runtime.onInstalled.addListener(async ({reason}) => {
         });
     }
 
-    for (const {SHA1, Listingreason} of records2) {
+    for (const {Listingreason} of records2) {
         ssList.push(Listingreason);
     }
+    // console.log('array blacklist first element: ' + ssList.at(0));
 
     chrome.storage.sync.set({enabled: true}, function () {
         console.log('The extension is enabled.');

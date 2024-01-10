@@ -98,4 +98,7 @@
 
 - implementazione di un server in locale con node, che accede al cerificato di un url.
 
-- ![Alt text](image.png)
+  ![Alt text](image.png)
+
+- utilizzo server locale testato:
+  ![Alt text](image-1.png)
