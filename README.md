@@ -9,37 +9,37 @@ NOPHISH is a comprehensive browser extension that protects users from phishing a
 
 Real-time URL scanning using multiple threat intelligence APIs
     
-    Static indicator detection: Typosquatting, Punycode, IDN homograph attacks
-    
-    API integration: Google Safe Browsing, IPQualityScore, PhishTank
-    
-    Evilginx detection via SSL certificate analysis
-    
-    Local database caching for efficient reputation checks
-    
-    User-friendly warnings for suspicious sites
-    
-    Lightweight and non-intrusive
+Static indicator detection: Typosquatting, Punycode, IDN homograph attacks
+
+API integration: Google Safe Browsing, IPQualityScore, PhishTank
+
+Evilginx detection via SSL certificate analysis
+
+Local database caching for efficient reputation checks
+
+User-friendly warnings for suspicious sites
+
+Lightweight and non-intrusive
 
 # 🛠️ Technologies Used
 
-    WebExtensions API (Manifest V2)
-    
-    JavaScript (ES6+)
-    
-    HTML/CSS for UI components
-    
-    IndexedDB for local data storage
-    
-    Node.js (local server for SSL certificate analysis)
-    
-    Threat Intelligence APIs:
-    
-    Google Safe Browsing
-    
-    IPQualityScore
-    
-    PhishTank (via public database)
+WebExtensions API (Manifest V2)
+
+JavaScript (ES6+)
+
+HTML/CSS for UI components
+
+IndexedDB for local data storage
+
+Node.js (local server for SSL certificate analysis)
+
+Threat Intelligence APIs:
+
+Google Safe Browsing
+
+IPQualityScore
+
+PhishTank (via public database)
 
 # 📦 Installation
 
@@ -57,28 +57,29 @@ Clone the repository.
 
 3. For SSL analysis, run the local Node.js server:
 
-    cd server
-    npm install
-    node server.js
+        cd server
+        npm install
+        node server.js
 
 
 # 🚀 How It Works
 
-    URL Interception: Uses webRequest.onBeforeRequest to capture navigation attempts.
-    
-    Reputation Check:
-    
-    Checks local database (IndexedDB) for cached reputation
-    
-    Validates against whitelist/blacklist
-    
-    Queries APIs for threat intelligence
-    
-    Score Calculation: Combines scores from multiple sources (syntax, APIs) to determine risk.
-    
-    Blocking: Blocks malicious URLs and displays a warning page.
-    
-    Evilginx Detection: Uses a local Node.js server to analyze SSL certificates for suspicious issuers.
+URL Interception: Uses webRequest.onBeforeRequest to capture navigation attempts.
+
+Reputation Check:
+
+Checks local database (IndexedDB) for cached reputation
+
+Validates against whitelist/blacklist
+
+Queries APIs for threat intelligence
+
+Score Calculation: Combines scores from multiple sources (syntax, APIs) to determine risk.
+
+Blocking: Blocks malicious URLs and displays a warning page.
+
+Evilginx Detection: Uses a local Node.js server to analyze SSL certificates for suspicious issuers.
+
 # 🔧 Configuration
 
 API Keys (Required)
@@ -93,6 +94,7 @@ Add keys to background.js:
       GOOGLE: 'your_google_api_key',
       IPQUALITY: 'your_ipquality_api_key'
     };
+    
 # 🧪 Testing
 Tested against:
 
