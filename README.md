@@ -2,10 +2,10 @@
 
 A powerful, multi-layered browser extension designed to detect and block phishing attempts in real-time using static URL analysis, threat intelligence APIs, and SSL certificate inspection.
 
-#🔍 Overview
+## 🔍 Overview
 NOPHISH is a comprehensive browser extension that protects users from phishing attacks by analyzing URLs in real-time, checking against reputable threat databases, and detecting advanced phishing tools like Evilginx. It combines multiple defensive strategies to provide robust protection against both known and emerging phishing threats.
 
-# ✨ Features
+## ✨ Features
 
 Real-time URL scanning using multiple threat intelligence APIs
     
@@ -21,7 +21,7 @@ User-friendly warnings for suspicious sites
 
 Lightweight and non-intrusive
 
-# 🛠️ Technologies Used
+## 🛠️ Technologies Used
 
 WebExtensions API (Manifest V2)
 
@@ -41,7 +41,7 @@ IPQualityScore
 
 PhishTank (via public database)
 
-# 📦 Installation
+## 📦 Installation
 
 1. From Source:
 Clone the repository.
@@ -62,7 +62,7 @@ Clone the repository.
         node server.js
 
 
-# 🚀 How It Works
+## 🚀 How It Works
 
 URL Interception: Uses webRequest.onBeforeRequest to capture navigation attempts.
 
@@ -80,7 +80,7 @@ Blocking: Blocks malicious URLs and displays a warning page.
 
 Evilginx Detection: Uses a local Node.js server to analyze SSL certificates for suspicious issuers.
 
-# 🔧 Configuration
+## 🔧 Configuration
 
 API Keys (Required)
 
@@ -95,7 +95,7 @@ Add keys to background.js:
       IPQUALITY: 'your_ipquality_api_key'
     };
     
-# 🧪 Testing
+## 🧪 Testing
 Tested against:
 
 Known phishing URLs (PhishTank)
@@ -106,7 +106,7 @@ Punycode attacks (e.g., xn--ggle-55da.com)
 
 Evilginx phishing proxies
 
-# 📈 Future Enhancements
+## 📈 Future Enhancements
 
 Machine learning integration for heuristic detection
 
@@ -118,7 +118,7 @@ Support for Manifest V3
 
 Expanded API integrations
 
-# 👨‍💻 Author
+## 👨‍💻 Author
 Probjot Singh
 
 GitHub: SinghProbjot (https://github.com/SinghProbjot)
