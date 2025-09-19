@@ -56,10 +56,9 @@ Clone the repository.
     Click "Load unpacked" and select the extension folder
 
 3. For SSL analysis, run the local Node.js server:
-
-    cd server
-    npm install
-    node server.js
+        cd server
+        npm install
+        node server.js
 
 
 ## 🚀 How It Works
@@ -88,12 +87,11 @@ Google Safe Browsing: Get an API key from Google Cloud Console (https://console.
 
 IPQualityScore: Sign up at IPQualityScore (https://www.ipqualityscore.com/) for an API key.
 
-Add keys to background.js:
-   
-const API_KEYS = {
-  GOOGLE: 'your_google_api_key',
-  IPQUALITY: 'your_ipquality_api_key'
-};
+Add keys to background.js:   
+    const API_KEYS = {
+      GOOGLE: 'your_google_api_key',
+      IPQUALITY: 'your_ipquality_api_key'
+    };
  
 ## 🧪 Testing
 Tested against:
